@@ -23,14 +23,14 @@ const fetchRequest = (url, address, callback = () => { }) => {
             })
         }
     }).on('error', (e) => {
-        console.error(e);
-        callback([address, 'NO RESPONSE'])
+        console.error(e); 
+        callback([address, `NO Data found against the URL${url}`])
     })
 }
 const getTitle = (body) => {
     let match = body.match(/<title>([^<]*)<\/title>/);
     if (!match || typeof match[1] !== 'string')
-        throw new Error('Unable to parse the title tag');
+        throw new Error('Error while parsing the data No data found');
     return match[1];
 }
 const getCorrectUrls = (addresses) => {
@@ -44,10 +44,10 @@ const getCorrectUrls = (addresses) => {
 
 const getPromiseData = (url , address) => fetch(url)
     .then(response => response.text())
-    .then(body =>[address, getTitle(body)])
+    .then(result =>[address, getTitle(result)])
     .catch((error) => {
-    console.log(`error while fetching URL(${url}) :`, error);
-    return 'NO RESPONSE';
+        console.log(error);
+    return 'No Data Found Against Url';
 })
 
 module.exports = { getTitle, fetchRequest, getCorrectUrls, getPromiseData}

@@ -9,24 +9,24 @@ router.get('/' ,async (req,res) => {
 
   // Using Simple CallBacks
 
-  // var addresses = typeof req.query.address === "string" ? [req.query.address] : req.query.address;
-  // if (!addresses) {
-  //   return response.send('Give the address in URL to get the result')
-  // }
-  // var titlesOfUrls = []
-  // const urls = utilities.getCorrectUrls(addresses);
-  // let urlsLength = urls.length;
-  // urls.forEach((url, i) => {
-  //   utilities.fetchRequest(url, addresses[i], (title) => {
-  //     titlesOfUrls.push(title)
-  //     setView(titlesOfUrls , () => { return; })
-  //   })
-  // })
-  // function setView(titlesOfUrls , callback) {
-  //   if (titlesOfUrls.length === urlsLength) {
-  //     callback(res.render('index', {titlesOfUrls}));
-  //   }
-  // }
+  var addresses = typeof req.query.address === "string" ? [req.query.address] : req.query.address;
+  if (!addresses) {
+    return response.send('Give the address in URL to get the result')
+  }
+  var titlesOfUrls = []
+  const urls = utilities.getCorrectUrls(addresses);
+  let urlsLength = urls.length;
+  urls.forEach((url, i) => {
+    utilities.fetchRequest(url, addresses[i], (title) => {
+      titlesOfUrls.push(title)
+      setView(titlesOfUrls , () => { return; })
+    })
+  })
+  function setView(titlesOfUrls , callback) {
+    if (titlesOfUrls.length === urlsLength) {
+      callback(res.render('index', {titlesOfUrls}));
+    }
+  }
 
   // End Call Back implementation
 
@@ -47,26 +47,24 @@ router.get('/' ,async (req,res) => {
     // })
     //   .catch((error) => {
     //     console.log('error: ', error);
-    //   })
+    //    })
 
   // End of Promise implementation
 
 
   // Using control flow library Async.js
 
-  var addresses = typeof req.query.address === "string" ? [req.query.address] : req.query.address;
-    if (!addresses) {
-      return response.send('Give the address in URL to get the result')
-    }
-    const urls = utilities.getCorrectUrls(addresses);
-    console.log(addresses);
-    async.map(urls , async (url,index) => utilities.getPromiseData(url,addresses[index]), (err, titlesOfUrls) => {
-      if (err) throw err;
-      console.log(titlesOfUrls);
-      res.render('index', { titlesOfUrls })
-    })
+    // var addresses = typeof req.query.address === "string" ? [req.query.address] : req.query.address;
+    // if (!addresses) {
+    //   return response.send('Give the address in URL to get the result')
+    // }
+    // const urls = utilities.getCorrectUrls(addresses);
+    // async.map(urls , async (url,i) => utilities.getPromiseData(url,addresses), (err, titlesOfUrls) => {
+    //   if (err) throw err;
+    //   const data = titlesOfUrls.map((title, i) => [addresses[i], title[1]]);
+    //   res.render('index', { titlesOfUrls: data })
+    // })
 
-
-
+  // End of flow library implementation
 });
 module.exports = router;
